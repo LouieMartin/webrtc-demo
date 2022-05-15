@@ -85,8 +85,8 @@ export const Home: React.FC<Props> = (_: Props) => {
                         </>
                     ) : (
                         <>
-                            <video autoPlay ref={video} muted />
-                            <video autoPlay ref={userVideo} />
+                            <video style={{ transform: 'scaleY(180deg)' }} autoPlay ref={video} muted />
+                                <video style={{ transform: 'scaleY(180deg)' }} autoPlay ref={userVideo} />
                         </>
                     )}
                 </Box>
