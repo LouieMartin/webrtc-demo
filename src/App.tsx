@@ -38,8 +38,7 @@ export const App: React.FC<Props> = (_: Props) => {
           header={<StyledHeader />}
           styles={{
             main: {
-              height: 'calc(100vh - 60px)',
-              padding: 0,
+              padding: '60px 0 0 0',
             },
           }}
         >
