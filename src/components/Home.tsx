@@ -7,6 +7,7 @@ type Props = {}
 export const Home: React.FC<Props> = (_: Props) => {
     const userVideo = React.useRef<HTMLVideoElement | null>(null);
     const [inCall, setInCall] = React.useState<boolean>(false);
+    const [call, setCall] = React.useState<MediaConnection>();
     const video = React.useRef<HTMLVideoElement | null>(null);
     const [userId, setUserId] = React.useState<string>('');
     const [peer, setPeer] = React.useState<Peer>();
@@ -16,6 +17,7 @@ export const Home: React.FC<Props> = (_: Props) => {
 
         newPeer.on('open', () => setPeer(newPeer));
         newPeer.on('call', (call: MediaConnection) => {
+            setCall(call);
             setInCall(oldState => !oldState);
             navigator.mediaDevices.getUserMedia({
                 audio: true,
@@ -38,7 +40,10 @@ export const Home: React.FC<Props> = (_: Props) => {
             });
         });
 
-        return () => newPeer.destroy();
+        return () => {
+            newPeer.destroy();
+            call?.close();
+        };
     }, []);
 
     return (
@@ -66,6 +71,7 @@ export const Home: React.FC<Props> = (_: Props) => {
 
                                         const call = peer.call(userId, stream);
 
+                                        setCall(call);
                                         call.on('stream', (userStream: MediaStream) => {
                                             if (userVideo.current) {
                                                 userVideo.current.srcObject = userStream;
@@ -85,8 +91,8 @@ export const Home: React.FC<Props> = (_: Props) => {
                         </>
                     ) : (
                         <>
-                            <video autoPlay ref={userVideo} />
                             <video autoPlay ref={video} muted />
+                            <video autoPlay ref={userVideo} />
                         </>
                     )}
                 </Box>
