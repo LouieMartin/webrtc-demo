@@ -54,7 +54,7 @@ export const Home: React.FC<Props> = (_: Props) => {
   }, []);
 
   return (
-    <Center sx={{ height: '100vh' }}>
+    <Center sx={{ height: 'calc(100vh - 60px)' }}>
       {peer ? (
         <Box p="md">
           {inCall ? (
