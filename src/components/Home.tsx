@@ -16,7 +16,6 @@ export const Home: React.FC<Props> = (_: Props) => {
 
         newPeer.on('open', () => setPeer(newPeer));
         newPeer.on('call', (call: MediaConnection) => {
-            console.log('Someone called you');
             setInCall(oldState => !oldState);
             navigator.mediaDevices.getUserMedia({
                 audio: true,
@@ -31,6 +30,10 @@ export const Home: React.FC<Props> = (_: Props) => {
                     if (userVideo.current) {
                         userVideo.current.srcObject = userStream;
                     }
+                });
+
+                call.on('close', () => {
+                    setInCall(oldState => !oldState);
                 });
             });
         });
