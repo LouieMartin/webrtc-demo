@@ -21,12 +21,6 @@ export const Home: React.FC<Props> = (_: Props) => {
                 audio: true,
                 video: true,
             }).then(stream => {
-                const connection = newPeer.connect(call.peer);
-
-                connection.on('close', () => {
-                    setInCall(oldState => !oldState);
-                });
-
                 if (video.current) {
                     video.current.srcObject = stream;
                 }
@@ -36,6 +30,10 @@ export const Home: React.FC<Props> = (_: Props) => {
                     if (userVideo.current) {
                         userVideo.current.srcObject = userStream;
                     }
+                });
+
+                call.on('close', () => {
+                    setInCall(oldState => !oldState);
                 });
             });
         });
@@ -67,11 +65,6 @@ export const Home: React.FC<Props> = (_: Props) => {
                                         }
 
                                         const call = peer.call(userId, stream);
-                                        const connection = peer?.connect(call.peer);
-
-                                        connection.on('close', () => {
-                                            setInCall(oldState => !oldState);
-                                        });
 
                                         call.on('stream', (userStream: MediaStream) => {
                                             if (userVideo.current) {
