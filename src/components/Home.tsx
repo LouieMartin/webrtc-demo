@@ -38,7 +38,7 @@ export const Home: React.FC<Props> = (_: Props) => {
             });
         });
 
-        return () => newPeer.disconnect();
+        return () => newPeer.destroy();
     }, []);
 
     return (
