@@ -1,0 +1,27 @@
+{
+  "name": "webrtc-demo",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@mantine/core": "^4.2.4",
+    "@mantine/form": "^4.2.4",
+    "@mantine/hooks": "^4.2.4",
+    "peerjs": "^1.4.3",
+    "react": "^18.1.0",
+    "react-dom": "^18.1.0",
+    "tabler-icons-react": "^1.48.0",
+    "vercel": "^24.2.3"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.9",
+    "@types/react-dom": "^18.0.4",
+    "@vitejs/plugin-react": "^1.3.2",
+    "typescript": "^4.6.4",
+    "vite": "^2.9.9"
+  }
+}
