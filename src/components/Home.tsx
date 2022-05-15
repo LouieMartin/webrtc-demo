@@ -7,7 +7,6 @@ type Props = {}
 export const Home: React.FC<Props> = (_: Props) => {
     const userVideo = React.useRef<HTMLVideoElement | null>(null);
     const [inCall, setInCall] = React.useState<boolean>(false);
-    const [call, setCall] = React.useState<MediaConnection>();
     const video = React.useRef<HTMLVideoElement | null>(null);
     const [userId, setUserId] = React.useState<string>('');
     const [peer, setPeer] = React.useState<Peer>();
@@ -17,12 +16,17 @@ export const Home: React.FC<Props> = (_: Props) => {
 
         newPeer.on('open', () => setPeer(newPeer));
         newPeer.on('call', (call: MediaConnection) => {
-            setCall(call);
             setInCall(oldState => !oldState);
             navigator.mediaDevices.getUserMedia({
                 audio: true,
                 video: true,
             }).then(stream => {
+                const connection = newPeer.connect(call.peer);
+
+                connection.on('close', () => {
+                    setInCall(oldState => !oldState);
+                });
+
                 if (video.current) {
                     video.current.srcObject = stream;
                 }
@@ -33,17 +37,10 @@ export const Home: React.FC<Props> = (_: Props) => {
                         userVideo.current.srcObject = userStream;
                     }
                 });
-
-                call.on('close', () => {
-                    setInCall(oldState => !oldState);
-                });
             });
         });
 
-        return () => {
-            newPeer.destroy();
-            call?.close();
-        };
+        return () => newPeer.destroy();
     }, []);
 
     return (
@@ -70,8 +67,12 @@ export const Home: React.FC<Props> = (_: Props) => {
                                         }
 
                                         const call = peer.call(userId, stream);
+                                        const connection = peer?.connect(call.peer);
 
-                                        setCall(call);
+                                        connection.on('close', () => {
+                                            setInCall(oldState => !oldState);
+                                        });
+
                                         call.on('stream', (userStream: MediaStream) => {
                                             if (userVideo.current) {
                                                 userVideo.current.srcObject = userStream;
