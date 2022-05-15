@@ -42,9 +42,9 @@ export const Home: React.FC<Props> = (_: Props) => {
     }, []);
 
     return (
-        <Center sx={{ height: '100%' }}>
+        <Center sx={{ height: '100vh' }}>
             {peer ? (
-                <Box>
+                <Box p="md">
                     {!inCall ? (
                         <>
                             <Title align="center">WebRTC Demo</Title>
