@@ -1,5 +1,5 @@
 import { useLocalStorage, useColorScheme } from '@mantine/hooks';
-import { Home } from './components';
+import { ColorSchemeButton, Home } from './components';
 import * as React from 'react';
 import {
   ColorSchemeProvider,
@@ -33,6 +33,7 @@ export const App: React.FC<Props> = (_: Props) => {
         withGlobalStyles
         withNormalizeCSS
       >
+        <ColorSchemeButton />
         <Home />
       </MantineProvider>
     </ColorSchemeProvider>
