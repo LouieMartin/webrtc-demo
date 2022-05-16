@@ -73,7 +73,7 @@ export const Home: React.FC<Props> = (_: Props) => {
         <Box p="md">
           {inCall ? (
             <>
-              <video className={classes.userVideo} ref={userVideo} autoPlay muted />
+              <video className={classes.userVideo} ref={userVideo} autoPlay />
               <Affix position={{ bottom: 16, right: 16 }}>
                 <ActionIcon
                   onClick={() => call?.close()}
