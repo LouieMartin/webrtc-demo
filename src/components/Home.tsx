@@ -18,8 +18,8 @@ type Props = {}
 
 const useStyles = createStyles({
   userVideo: {
-    position: 'fixed',
     minHeight: '100%',
+    position: 'fixed',
     minWidth: '100%',
     zIndex: -1,
     bottom: 0,
@@ -38,7 +38,7 @@ export const Home: React.FC<Props> = (_: Props) => {
       userId: '',
     },
   });
-  
+
 
   React.useEffect(() => {
     const newPeer = new Peer();
@@ -67,68 +67,68 @@ export const Home: React.FC<Props> = (_: Props) => {
     return () => newPeer.destroy();
   }, []);
 
+  if (inCall) {
+    return (
+      <>
+        <video className={classes.userVideo} ref={userVideo} autoPlay />
+        <Affix position={{ bottom: 16, right: 16 }}>
+          <ActionIcon
+            onClick={() => call?.close()}
+            variant="filled"
+            color="red"
+            radius="xl"
+            size="xl"
+          >
+            <Phone />
+          </ActionIcon>
+        </Affix>
+      </>
+    );
+  }
+
   return (
     <Center sx={{ height: 'calc(100vh - 60px)' }}>
       {peer ? (
         <Box p="md">
-          {inCall ? (
-            <>
-              <video className={classes.userVideo} ref={userVideo} autoPlay />
-              <Affix position={{ bottom: 16, right: 16 }}>
-                <ActionIcon
-                  onClick={() => call?.close()}
-                  variant="filled"
-                  color="red"
-                  radius="xl"
-                  size="xl"
-                >
-                  <Phone />
-                </ActionIcon>
-              </Affix>
-            </>
-          ) : (
-            <>
-              <Text color="dimmed" align="center">{peer.id}</Text>
-              <form onSubmit={callForm.onSubmit(values => {
+          <Text color="dimmed" align="center">{peer.id}</Text>
+          <form onSubmit={callForm.onSubmit(values => {
+            setInCall(oldState => !oldState);
+            callForm.setValues({ userId: '' });
+            navigator.mediaDevices.getUserMedia({
+              audio: true,
+              video: true,
+            }).then(stream => {
+              const call = peer.call(values.userId, stream);
+
+              setCall(call);
+              call.on('stream', (userStream: MediaStream) => {
+                if (userVideo.current) {
+                  userVideo.current.srcObject = userStream;
+                }
+              });
+
+              call.on('close', () => {
                 setInCall(oldState => !oldState);
-                callForm.setValues({ userId: '' });
-                navigator.mediaDevices.getUserMedia({
-                  audio: true,
-                  video: true,
-                }).then(stream => {
-                  const call = peer.call(values.userId, stream);
-
-                  setCall(call);
-                  call.on('stream', (userStream: MediaStream) => {
-                    if (userVideo.current) {
-                      userVideo.current.srcObject = userStream;
-                    }
-                  });
-
-                  call.on('close', () => {
-                    setInCall(oldState => !oldState);
-                  });
-                });
-              })}>
-                <TextInput
-                  {...callForm.getInputProps('userId')}
-                  placeholder="User ID here"
-                  mt="md"
-                />
-                <Button
-                  type="submit"
-                  radius="xl"
-                  fullWidth
-                  mt="md"
-                >
-                  Call
-                </Button>
-              </form>
-            </>
-          )}
+              });
+            });
+          })}>
+            <TextInput
+              {...callForm.getInputProps('userId')}
+              placeholder="User ID here"
+              mt="md"
+            />
+            <Button
+              type="submit"
+              radius="xl"
+              fullWidth
+              mt="md"
+            >
+              Call
+            </Button>
+          </form>
         </Box>
       ) : (
-          <Loader variant="dots" />
+        <Loader variant="dots" />
       )}
     </Center>
   );
