@@ -1,42 +1,56 @@
+import { Phone } from 'tabler-icons-react';
 import { MediaConnection, Peer } from 'peerjs';
 import { useForm } from '@mantine/form';
 import * as React from 'react';
 import {
+  createStyles,
+  ActionIcon,
   TextInput,
   Center,
   Button,
   Loader,
+  Affix,
   Text,
   Box,
 } from '@mantine/core';
 
 type Props = {}
 
+const useStyles = createStyles({
+  userVideo: {
+    position: 'fixed',
+    minHeight: '100%',
+    minWidth: '100%',
+    zIndex: -1,
+    bottom: 0,
+    right: 0,
+  },
+});
+
 export const Home: React.FC<Props> = (_: Props) => {
   const userVideo = React.useRef<HTMLVideoElement | null>(null);
   const [inCall, setInCall] = React.useState<boolean>(false);
-  const video = React.useRef<HTMLVideoElement | null>(null);
+  const [call, setCall] = React.useState<MediaConnection>();
   const [peer, setPeer] = React.useState<Peer>();
+  const { classes } = useStyles();
   const callForm = useForm({
     initialValues: {
       userId: '',
     },
   });
+  
 
   React.useEffect(() => {
     const newPeer = new Peer();
 
     newPeer.on('open', () => setPeer(newPeer));
     newPeer.on('call', (call: MediaConnection) => {
+      setCall(call);
       setInCall(oldState => !oldState);
       navigator.mediaDevices.getUserMedia({
         audio: true,
         video: true,
       }).then(stream => {
-        if (video.current) {
-          video.current.srcObject = stream;
-        }
-
         call.answer(stream);
         call.on('stream', (userStream: MediaStream) => {
           if (userVideo.current) {
@@ -59,24 +73,32 @@ export const Home: React.FC<Props> = (_: Props) => {
         <Box p="md">
           {inCall ? (
             <>
-              <video style={{ borderRadius: 16, marginRight: 16 }} ref={video} autoPlay muted />
-              <video style={{ borderRadius: 16, marginRight: 16 }} ref={userVideo} autoPlay />
+              <video className={classes.userVideo} ref={userVideo} autoPlay muted />
+              <Affix position={{ bottom: 16, right: 16 }}>
+                <ActionIcon
+                  onClick={() => call?.close()}
+                  variant="filled"
+                  color="red"
+                  radius="xl"
+                  size="xl"
+                >
+                  <Phone />
+                </ActionIcon>
+              </Affix>
             </>
           ) : (
             <>
               <Text color="dimmed" align="center">{peer.id}</Text>
               <form onSubmit={callForm.onSubmit(values => {
                 setInCall(oldState => !oldState);
+                callForm.setValues({ userId: '' });
                 navigator.mediaDevices.getUserMedia({
                   audio: true,
                   video: true,
                 }).then(stream => {
-                  if (video.current) {
-                    video.current.srcObject = stream;
-                  }
-
                   const call = peer.call(values.userId, stream);
 
+                  setCall(call);
                   call.on('stream', (userStream: MediaStream) => {
                     if (userVideo.current) {
                       userVideo.current.srcObject = userStream;
