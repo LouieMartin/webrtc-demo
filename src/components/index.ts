@@ -1,2 +1,2 @@
-export * from './ColorSchemeButton';
+export * from './StyledHeader';
 export * from './Home';
