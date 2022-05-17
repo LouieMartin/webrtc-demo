@@ -11,7 +11,6 @@
     "@mantine/core": "^4.2.5",
     "@mantine/form": "^4.2.5",
     "@mantine/hooks": "^4.2.5",
-    "@mantine/notifications": "^4.2.5",
     "peerjs": "^1.4.4",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
