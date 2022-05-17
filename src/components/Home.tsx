@@ -1,6 +1,5 @@
-import { updateNotification, showNotification } from '@mantine/notifications';
 import { MediaConnection, Peer } from 'peerjs';
-import { Phone, Check, X } from 'tabler-icons-react';
+import { Phone } from 'tabler-icons-react';
 import { useForm } from '@mantine/form';
 import * as React from 'react';
 import {
