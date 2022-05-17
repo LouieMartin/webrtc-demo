@@ -1,5 +1,6 @@
+import { updateNotification, showNotification } from '@mantine/notifications';
 import { MediaConnection, Peer } from 'peerjs';
-import { Phone } from 'tabler-icons-react';
+import { Phone, Check, X } from 'tabler-icons-react';
 import { useForm } from '@mantine/form';
 import * as React from 'react';
 import {
@@ -58,6 +59,10 @@ export const Home: React.FC<Props> = (_: Props) => {
           }
         });
 
+        call.on('error', () => {
+          setInCall(oldState => !oldState);
+        });
+
         call.on('close', () => {
           setInCall(oldState => !oldState);
         });
@@ -105,6 +110,10 @@ export const Home: React.FC<Props> = (_: Props) => {
                 if (userVideo.current) {
                   userVideo.current.srcObject = userStream;
                 }
+              });
+
+              call.on('error', () => {
+                setInCall(oldState => !oldState);
               });
 
               call.on('close', () => {
