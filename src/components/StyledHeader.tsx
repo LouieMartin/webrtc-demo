@@ -29,7 +29,7 @@ export const StyledHeader: React.FC<Props> = (_: Props) => {
     return (
         <Header height={60} fixed>
             <Container className={classes.header} fluid>
-                <Text color={dark ? 'yellow' : 'blue'} weight={900} size="xl">JustChat</Text>
+                <Text color={dark ? 'yellow' : 'blue'} weight={900} size="xl">JustCall</Text>
                 <Tooltip label={dark ? 'Light mode' : 'Dark mode'}>
                     <ActionIcon
                         onClick={() => toggleColorScheme()}
