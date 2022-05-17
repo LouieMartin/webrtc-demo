@@ -1,10 +1,11 @@
 import { useLocalStorage, useColorScheme } from '@mantine/hooks';
-import { ColorSchemeButton, Home } from './components';
+import { StyledHeader, Home } from './components';
 import * as React from 'react';
 import {
   ColorSchemeProvider,
   MantineProvider,
   ColorScheme,
+  AppShell,
 } from '@mantine/core';
 
 type Props = {}
@@ -33,8 +34,16 @@ export const App: React.FC<Props> = (_: Props) => {
         withGlobalStyles
         withNormalizeCSS
       >
-        <ColorSchemeButton />
-        <Home />
+        <AppShell
+          header={<StyledHeader />}
+          styles={{
+            main: {
+              padding: 0,
+            },
+          }}
+        >
+          <Home />
+        </AppShell>
       </MantineProvider>
     </ColorSchemeProvider>
   );
