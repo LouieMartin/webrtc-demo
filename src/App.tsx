@@ -38,7 +38,7 @@ export const App: React.FC<Props> = (_: Props) => {
           header={<StyledHeader />}
           styles={{
             main: {
-              padding: 0,
+              padding: '60px 0 0 0',
             },
           }}
         >
