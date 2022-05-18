@@ -1,4 +1,4 @@
-import { MoonStars, Sun } from 'tabler-icons-react';
+import { BrandGithub, MoonStars, Sun } from 'tabler-icons-react';
 import {
   useMantineColorScheme,
   createStyles,
@@ -6,6 +6,7 @@ import {
   Container,
   Tooltip,
   Header,
+  Group,
   Text,
 } from '@mantine/core';
 import * as React from 'react';
@@ -30,16 +31,29 @@ export const StyledHeader: React.FC<Props> = (_: Props) => {
     <Header height={60} fixed>
       <Container className={classes.header} fluid>
         <Text color={dark ? 'yellow' : 'blue'} weight={900} size="xl">JustCall</Text>
-        <Tooltip label={dark ? 'Light mode' : 'Dark mode'}>
-          <ActionIcon
-            onClick={() => toggleColorScheme()}
-            color={dark ? 'yellow' : 'blue'}
-            variant="hover"
-            radius="xl"
-          >
-            {dark ? <Sun size={18} /> : <MoonStars size={18} />}
-          </ActionIcon>
-        </Tooltip>
+        <Group>
+          <Tooltip label="Source code">
+            <ActionIcon<'a'>
+              href="https://github.com/LouieMartin/webrtc-demo"
+              color={dark ? 'gray' : 'dark'}
+              variant="hover"
+              component="a"
+              radius="xl"
+            >
+              <BrandGithub size={18} />
+            </ActionIcon>
+          </Tooltip>
+          <Tooltip label={dark ? 'Light mode' : 'Dark mode'}>
+            <ActionIcon
+              onClick={() => toggleColorScheme()}
+              color={dark ? 'yellow' : 'blue'}
+              variant="hover"
+              radius="xl"
+            >
+              {dark ? <Sun size={18} /> : <MoonStars size={18} />}
+            </ActionIcon>
+          </Tooltip>
+        </Group>
       </Container>
     </Header>
   );
