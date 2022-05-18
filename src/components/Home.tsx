@@ -46,7 +46,7 @@ export const Home: React.FC<Props> = (_: Props) => {
     newPeer.on('open', () => setPeer(newPeer));
     newPeer.on('call', (call: MediaConnection) => {
       setCall(call);
-      setInCall(oldState => !oldState);
+      setInCall(true);
       navigator.mediaDevices.getUserMedia({
         audio: true,
         video: true,
@@ -59,11 +59,11 @@ export const Home: React.FC<Props> = (_: Props) => {
         });
 
         call.on('error', () => {
-          setInCall(oldState => !oldState);
+          setInCall(false);
         });
 
         call.on('close', () => {
-          setInCall(oldState => !oldState);
+          setInCall(false);
         });
       });
     });
@@ -77,7 +77,10 @@ export const Home: React.FC<Props> = (_: Props) => {
         <video className={classes.userVideo} ref={userVideo} autoPlay />
         <Affix position={{ bottom: 16, right: 16 }}>
           <ActionIcon
-            onClick={() => call?.close()}
+            onClick={() => {
+              setInCall(false);
+              call?.close();
+            }}
             variant="filled"
             color="red"
             radius="xl"
@@ -96,7 +99,7 @@ export const Home: React.FC<Props> = (_: Props) => {
         <Box p="md">
           <Text color="dimmed" align="center">{peer.id}</Text>
           <form onSubmit={callForm.onSubmit(values => {
-            setInCall(oldState => !oldState);
+            setInCall(true);
             callForm.setValues({ userId: '' });
             navigator.mediaDevices.getUserMedia({
               audio: true,
@@ -112,11 +115,11 @@ export const Home: React.FC<Props> = (_: Props) => {
               });
 
               call.on('error', () => {
-                setInCall(oldState => !oldState);
+                setInCall(false);
               });
 
               call.on('close', () => {
-                setInCall(oldState => !oldState);
+                setInCall(false);
               });
             });
           })}>
